@@ -1,0 +1,33 @@
+############ Criando um script para efetuar um ping ############
+
+#!/bin/bash
+
+echo "Vamos testar se você alcança um determinado host?!"
+
+echo "Digite o endereço ip a ser testado"
+read "$ip"
+
+echo "Efetuando ping no ip" $ip
+
+ping -c1 $ip
+
+__________________________________________________________________________
+
+############ Criando um script utilizando condicionais ############
+
+#!/bin/bash
+
+echo "Digite o programa com melhor desempenho este ano"
+read $programa
+
+if [ "$programa == Openshift" ]
+  echo "O $programa ganhou disparado"
+elif [ !$programa == todos" ]
+  echo [ "Passe no RH para conversarmos sobre suas capacidade congnitivas" ]
+
+elif [ !$programa == nenhum" ]
+  echo [ "Passe no RH para conversarmos sobre suas capacidade congnitivas" ]
+
+else 
+  echo "É necessário reavalir novamente"
+fi
