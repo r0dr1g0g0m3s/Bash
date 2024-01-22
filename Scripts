@@ -1,3 +1,27 @@
+############ Explicações básicas #############
+
+#Operadores aritméticos
+
+#[EXP1 -eq EXP2]	Verdadeiro se EXP1 é igual a EXP2.
+#[EXP1 -ne EXP2]	Verdadeiro se EXP1 não é igual a EXP2.
+#[EXP1 -lt EXP2]	Verdadeiro se EXP1 é menor que EXP2.
+#[EXP1 -le EXP2]	Verdadeiro se EXP1 é menor ou igual a EXP2.
+#[EXP1 -gt EXP2]	Verdadeiro se EXP1 é maior que EXP2.
+#[EXP1 -ge EXP2]	Verdadeiro se EXP1 é maior ou igual a EXP2.
+
+
+#Operadores lógicos
+
+#[EXP1 -o EXP2]	Verdadeiro se EXP1 ou EXP2 for verdadeiro.
+#[EXP1 -a EXP2]	Verdadeiro se EXP1 e EXP2 forem verdadeiros.
+#[[EXP1 || EXP2]]	Verdadeiro se EXP1 ou EXP2 for verdadeiro. (Somente expansão)
+#[[EXP1 && EXP2]]	Verdadeiro se EXP1 e EXP2 forem verdadeiros. (Somente expansão)
+#[ ! EXP ]	Verdadeiro se EXP for falso. ! Não lógico (NOT)
+
+
+
+
+
 ############ Criando um script para efetuar um ping ############
 
 #!/bin/bash
@@ -10,6 +34,21 @@ read "$ip"
 echo "Efetuando ping no ip" $ip
 
 ping -c1 $ip
+
+__________________________________________________________________________
+
+########### Criando um script para marcar entrevistas ################
+
+#!/bin/bash
+
+echo " Tem quantos anos  de experiencia como pentester?"
+read anos
+if [ "anos" < "1"]
+then 
+        "volte quando tiver mais tempo na áres"
+else
+        "Vou agendar sua entrevista"
+fi
 
 __________________________________________________________________________
 
