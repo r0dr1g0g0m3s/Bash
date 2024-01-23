@@ -70,3 +70,21 @@ elif [ !$programa == nenhum" ]
 else 
   echo "É necessário reavalir novamente"
 fi
+
+
+_________________________________________________________________________________________________
+#!/bin/bash
+
+echo "Digite o endereço ip a ser varrido"
+read $ip
+
+echo "Digite a porta a ser varrida"
+read $porta
+
+if [ "$ip" -le "0" ]
+then
+        echo "Modo de uso: $0 192.168.0.2 80"
+
+else
+        echo "Varrendo host: $ip $porta"
+fi
