@@ -161,12 +161,18 @@ hping3 -S -p $2 -c 1 $1.$ip 2> /dev/null | GREP "flags=SA" | cut -d " " -f2 | cu
 done
 fi
 
-#OBS: Com o comando abaixo add, estamos enviando a saida do erro para a lixeira: 2> dev/null
-     Poderia colocar também 2> arquivo.txt
-     Filtrando com "GREP SA" se tem a certeza que a porta está aberta.
-     Filtrando com "cut -d" para imprimir na tela somente a informação do IP.
-     1>STDOUT
-     2>STDERR
-     0>STDIN
+#OBS: Com o comando abaixo add, estou enviando a saida do erro para a lixeira: "2> dev/null"
+      Poderia colocar 2> arquivo.txt
+      Filtrando com "GREP SA", tenho a certeza que a porta está aberta.
+      Filtrando com "cut -d", para imprimir na tela somente a informação do IP do host.
+      1>STDOUT
+      2>STDERR
+      0>STDIN
+
+################################# PARSING HTML (Analisando código html) ##################################
+
+#Descobrindo endereço Ip e subdomínios da URL
+
+
 
 
