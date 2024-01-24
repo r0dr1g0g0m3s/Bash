@@ -123,7 +123,7 @@ fi
 #Obs: para pesquisar em quais Ips as portas estavam abertas:
 #./script 172.17.0 | grep "flags=SA"
 
-################################# INICIANDO O SCRIPT PARTE II #########################################
+################################ DESCOBRINDO HOSTS COM PORTAS 80 ABERTA ##################################
 
 #!/bin/bash
 if [ "$1" == "" ]
@@ -134,14 +134,37 @@ then
 else 
 for ip in {1..254};
 do
-hping3 -S -p 80 -c 1 $1.$ip 2> /dev/null | GREP "flags=SA";
+hping3 -S -p 80 -c 1 $1.$ip 2> /dev/null | GREP "flags=SA" | cut -d " " -f2 | cut -d "=" -f2;
 done
 fi
 
-OBS: Com o comando abaixo add, estamos enviando a saida do erro para a lixeira: 2> dev/null
+#OBS: Com o comando abaixo add, estamos enviando a saida do erro para a lixeira: 2> dev/null
      Poderia colocar também 2> arquivo.txt
-     Se tentasse filtrar somente com "| GREP SA", os erros ainda vão aparecer.
      Filtrando com "GREP SA" se tem a certeza que a porta está aberta.
+     Filtrando com "cut -d" para imprimir na tela somente a informação do IP.
+     1>STDOUT
+     2>STDERR
+     0>STDIN
+
+################################# DESCOBRINDO HOSTS COM PORTA ABERTAS ##################################
+
+#!/bin/bash
+if [ "$1" == "" ]
+then
+        echo "PORTSCAN NETWORK"
+        echo "Modo de uso: Digite $0 REDE PORTA"
+        echo Exemplo: $0 192.168.0 80"
+else 
+for ip in {1..254};
+do
+hping3 -S -p $2 -c 1 $1.$ip 2> /dev/null | GREP "flags=SA" | cut -d " " -f2 | cut -d "=" -f2;
+done
+fi
+
+#OBS: Com o comando abaixo add, estamos enviando a saida do erro para a lixeira: 2> dev/null
+     Poderia colocar também 2> arquivo.txt
+     Filtrando com "GREP SA" se tem a certeza que a porta está aberta.
+     Filtrando com "cut -d" para imprimir na tela somente a informação do IP.
      1>STDOUT
      2>STDERR
      0>STDIN
