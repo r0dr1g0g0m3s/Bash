@@ -90,6 +90,7 @@ else
 fi
 _________________________________________________________________________________________________
 ########################## Quais hosts que possuem a porta 80 aberta ##########################
+#EXEMPLO
 
 #sudo hping3 -S -p 80 -c 1  www.google.com 
 #HPING www.google.com (eth0 142.250.219.36): S set, 40 headers + 0 data bytes
@@ -103,8 +104,45 @@ ________________________________________________________________________________
 Obs: Enviamos a flag S e recebemos SA, o que significa que a porta especificada está aberta.
      Se tivessemos recebido RA, saberiamos que a porta não está aberta.
 
-
+#INICIANDO O SCRIPT PARTE I
 #!/bin/bash
+if [ "$1" == "" ]
+then
+        echo "Modo de uso: Digite $0 REDE"
+        echo Exemplo: $0 172.17.0"
+else 
+for ip in {1..254};
+do
+hping3 -S -p 80 -c 1 $1.$ip
+done
+fi
 
+#Obs: caso deseje salvar em um arquivo:
+#./script 172.17.0 > arquivo.txt
+
+#Obs: para pesquisar em quais Ips as portas estavam abertas:
+#./script 172.17.0 | grep "flags=SA"
+
+#INICIANDO O SCRIPT PARTE II
+#!/bin/bash
+if [ "$1" == "" ]
+then
+        echo "Modo de uso: Digite $0 REDE"
+        echo Exemplo: $0 172.17.0"
+else 
+for ip in {1..254};
+do
+hping3 -S -p 80 -c 1 $1.$ip 2> dev/null
+done
+fi
+
+#obs: Com o comando abaixo add, estamos enviando a saida do erro para deve/nul:
+#2> dev/null
+#Poderia colocar também 2> arquivo.txt
+
+
+1>STDOUT
+2>STDERR
+0>STDIN
 
 
