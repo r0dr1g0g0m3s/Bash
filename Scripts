@@ -88,3 +88,23 @@ then
 else
         echo "Varrendo host: $ip $porta"
 fi
+_________________________________________________________________________________________________
+########################## Quais hosts que possuem a porta 80 aberta ##########################
+
+#sudo hping3 -S -p 80 -c 1  www.google.com 
+#HPING www.google.com (eth0 142.250.219.36): S set, 40 headers + 0 data bytes
+#len=44 ip=142.250.219.36 ttl=116 DF id=0 sport=80 flags=SA seq=0 win=65535 rtt=49.6 ms
+#
+#--- www.google.com hping statistic ---
+#1 packets transmitted, 1 packets received, 0% packet loss
+#round-trip min/avg/max = 49.6/49.6/49.6 ms
+
+
+Obs: Enviamos a flag S e recebemos SA, o que significa que a porta especificada está aberta.
+     Se tivessemos recebido RA, saberiamos que a porta não está aberta.
+
+
+#!/bin/bash
+
+
+
