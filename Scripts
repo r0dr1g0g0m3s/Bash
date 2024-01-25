@@ -26,8 +26,13 @@ grep href index.html | cut -d "/" -f 3 | grep "\." | cut -d '"' -f 1  | grep -v 
 #Direcionando a saída para um arquivo chamado lista
 grep href index.html | cut -d " " -f2 | grep "\." | cut -d "'" -f1 | grep -v "<l" > lista
 
+
 #ADICIONANDO FILTROS ATÉ QUE RESTE SOMENTE O ENDEREÇO IP
 
+#comando para descobrir o ip do namesite
+host intranet.businesscorp.com.br
+
+for url in $(cat list);do host url;done
 
 
 
