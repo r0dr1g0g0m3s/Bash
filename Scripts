@@ -1,3 +1,31 @@
+################################################ TESTE #####################################################
+
+  GNU nano 6.2                                                            script.parsing.sh *                                                                     GNU nano 6.2                                        script.parsing.sg                                                 #!/bin/bash
+#!/bin/bash
+
+if [ "$1" == "" ]
+then
+        echo "DNS SERVER"
+        echo "Modo de uso: Digite $0 site"
+        echo "Exemplo: $0 www.businesscorp.com.br"
+else
+        wget $1
+        grep "href" index.html | cut -d " " -f2 | grep "\." | cut -d "'" -f1 | grep -v "<l" > list
+
+
+        echo "##############################################"
+        echo "|->             Buscando hosts...          <-|"
+        echo "##############################################"
+
+        cat list
+        for url in $(cat list);do host $url | grep "has address";done > list2
+        cat list 2
+
+fi
+
+______________________________________________________________________________________________________________
+
+
 ################################# PARSING HTML (Analisando código html) ##################################
 
 #Descobrindo endereço Ip e subdomínios da URL
@@ -32,13 +60,8 @@ grep href index.html | cut -d " " -f2 | grep "\." | cut -d "'" -f1 | grep -v "<l
 #comando para descobrir o ip do namesite
 host intranet.businesscorp.com.br
 
-for url in $(cat list);do host url;done
-
-
-
-
-
-
+#Acessando a lista e executando o comando host url (host www.google.com), que traz a resolução do nome para IP 
+for url in $(cat list);do host $url | grep "has address";done
 
 ______________________________________________________________________________________________________________
 
