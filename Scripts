@@ -1,94 +1,90 @@
-############ Explicações básicas #############
+################################# PARSING HTML (Analisando código html) ##################################
 
-#Operadores aritméticos
+#Descobrindo endereço Ip e subdomínios da URL
 
-#[EXP1 -eq EXP2]	Verdadeiro se EXP1 é igual a EXP2.
-#[EXP1 -ne EXP2]	Verdadeiro se EXP1 não é igual a EXP2.
-#[EXP1 -lt EXP2]	Verdadeiro se EXP1 é menor que EXP2.
-#[EXP1 -le EXP2]	Verdadeiro se EXP1 é menor ou igual a EXP2.
-#[EXP1 -gt EXP2]	Verdadeiro se EXP1 é maior que EXP2.
-#[EXP1 -ge EXP2]	Verdadeiro se EXP1 é maior ou igual a EXP2.
+#salvar o index.html de site específico
+wget businesscorp.com.br
+
+(ver as informações baixadas e salvas em arquivo específico)
+cat index.html
+
+#Adicionando filtros
+grep href index.html <ou> cat index.html | grep href
+
+# filtrando a partir do segundo espaço
+grep href index.html | cut -d " " -f2
+
+#Filtrando por linhas que tem ponto (.)
+grep href index.html | cut -d " " -f2 | grep "\."
+
+grep href index.html | cut -d " " -f2 | grep "\." | cut -d "'" -f1
+
+#Retirando as linhas que contem <l
+grep href index.html | cut -d " " -f2 | grep "\." | cut -d "'" -f1 | grep -v "<l"
+
+#Direcionando a saída para um arquivo chamado lista
+grep href index.html | cut -d " " -f2 | grep "\." | cut -d "'" -f1 | grep -v "<l" > lista
 
 
-#Operadores lógicos
-
-#[EXP1 -o EXP2]	Verdadeiro se EXP1 ou EXP2 for verdadeiro.
-#[EXP1 -a EXP2]	Verdadeiro se EXP1 e EXP2 forem verdadeiros.
-#[[EXP1 || EXP2]]	Verdadeiro se EXP1 ou EXP2 for verdadeiro. (Somente expansão)
-#[[EXP1 && EXP2]]	Verdadeiro se EXP1 e EXP2 forem verdadeiros. (Somente expansão)
-#[ ! EXP ]	Verdadeiro se EXP for falso. ! Não lógico (NOT)
 
 
 
 
 
-############ Criando um script para efetuar um ping ############
 
-#!/bin/bash
 
-echo "Vamos testar se você alcança um determinado host?!"
+______________________________________________________________________________________________________________
 
-echo "Digite o endereço ip a ser testado"
-read "$ip"
-
-echo "Efetuando ping no ip" $ip
-
-ping -c1 $ip
-
-__________________________________________________________________________
-
-########### Criando um script para marcar entrevistas ################
+################################# DESCOBRINDO HOSTS COM PORTA ABERTAS ##################################
 
 #!/bin/bash
-
-echo " Tem quantos anos  de experiencia como pentester?"
-read anos
-if [ "anos" < "1"]
-then 
-        "volte quando tiver mais tempo na áres"
-else
-        "Vou agendar sua entrevista"
-fi
-
-__________________________________________________________________________
-
-############ Criando um script utilizando condicionais ############
-
-#!/bin/bash
-
-echo "Digite o programa com melhor desempenho este ano"
-read $programa
-
-if [ "$programa == Openshift" ]
-  echo "O $programa ganhou disparado"
-elif [ !$programa == todos" ]
-  echo [ "Passe no RH para conversarmos sobre suas capacidade congnitivas" ]
-
-elif [ !$programa == nenhum" ]
-  echo [ "Passe no RH para conversarmos sobre suas capacidade congnitivas" ]
-
-else 
-  echo "É necessário reavalir novamente"
-fi
-
-
-_________________________________________________________________________________________________
-#!/bin/bash
-
-echo "Digite o endereço ip a ser varrido"
-read $ip
-
-echo "Digite a porta a ser varrida"
-read $porta
-
-if [ "$ip" -le "0" ]
+if [ "$1" == "" ]
 then
-        echo "Modo de uso: $0 192.168.0.2 80"
-
-else
-        echo "Varrendo host: $ip $porta"
+        echo "PORTSCAN NETWORK"
+        echo "Modo de uso: Digite $0 REDE PORTA"
+        echo Exemplo: $0 192.168.0 80"
+else 
+for ip in {1..254};
+do
+hping3 -S -p $2 -c 1 $1.$ip 2> /dev/null | GREP "flags=SA" | cut -d " " -f2 | cut -d "=" -f2;
+done
 fi
-_________________________________________________________________________________________________
+
+#OBS: Com o comando abaixo add, estou enviando a saida do erro para a lixeira: "2> dev/null"
+      Poderia colocar 2> arquivo.txt
+      Filtrando com "GREP SA", tenho a certeza que a porta está aberta.
+      Filtrando com "cut -d", para imprimir na tela somente a informação do IP do host.
+      1>STDOUT
+      2>STDERR
+      0>STDIN
+
+______________________________________________________________________________________________________________
+
+################################ DESCOBRINDO HOSTS COM PORTAS 80 ABERTA ##################################
+
+#!/bin/bash
+if [ "$1" == "" ]
+then
+        echo "PORTSCAN NETWORK"
+        echo "Modo de uso: Digite $0 REDE"
+        echo Exemplo: $0 192.168.0"
+else 
+for ip in {1..254};
+do
+hping3 -S -p 80 -c 1 $1.$ip 2> /dev/null | GREP "flags=SA" | cut -d " " -f2 | cut -d "=" -f2;
+done
+fi
+
+#OBS: Com o comando abaixo add, estamos enviando a saida do erro para a lixeira: 2> dev/null
+     Poderia colocar também 2> arquivo.txt
+     Filtrando com "GREP SA" se tem a certeza que a porta está aberta.
+     Filtrando com "cut -d" para imprimir na tela somente a informação do IP.
+     1>STDOUT
+     2>STDERR
+     0>STDIN
+
+______________________________________________________________________________________________________________
+
 ########################## Quais hosts que possuem a porta 80 aberta ##########################
 #EXEMPLO
 
@@ -123,55 +119,113 @@ fi
 #Obs: para pesquisar em quais Ips as portas estavam abertas:
 #./script 172.17.0 | grep "flags=SA"
 
-################################ DESCOBRINDO HOSTS COM PORTAS 80 ABERTA ##################################
+______________________________________________________________________________________________________________
 
 #!/bin/bash
-if [ "$1" == "" ]
+
+echo "Digite o endereço ip a ser varrido"
+read $ip
+
+echo "Digite a porta a ser varrida"
+read $porta
+
+if [ "$ip" -le "0" ]
 then
-        echo "PORTSCAN NETWORK"
-        echo "Modo de uso: Digite $0 REDE"
-        echo Exemplo: $0 192.168.0"
-else 
-for ip in {1..254};
-do
-hping3 -S -p 80 -c 1 $1.$ip 2> /dev/null | GREP "flags=SA" | cut -d " " -f2 | cut -d "=" -f2;
-done
+        echo "Modo de uso: $0 192.168.0.2 80"
+
+else
+        echo "Varrendo host: $ip $porta"
 fi
+______________________________________________________________________________________________________________
 
-#OBS: Com o comando abaixo add, estamos enviando a saida do erro para a lixeira: 2> dev/null
-     Poderia colocar também 2> arquivo.txt
-     Filtrando com "GREP SA" se tem a certeza que a porta está aberta.
-     Filtrando com "cut -d" para imprimir na tela somente a informação do IP.
-     1>STDOUT
-     2>STDERR
-     0>STDIN
-
-################################# DESCOBRINDO HOSTS COM PORTA ABERTAS ##################################
+############ Criando um script utilizando condicionais ############
 
 #!/bin/bash
-if [ "$1" == "" ]
-then
-        echo "PORTSCAN NETWORK"
-        echo "Modo de uso: Digite $0 REDE PORTA"
-        echo Exemplo: $0 192.168.0 80"
+
+echo "Digite o programa com melhor desempenho este ano"
+read $programa
+
+if [ "$programa == Openshift" ]
+  echo "O $programa ganhou disparado"
+elif [ !$programa == todos" ]
+  echo [ "Passe no RH para conversarmos sobre suas capacidade congnitivas" ]
+
+elif [ !$programa == nenhum" ]
+  echo [ "Passe no RH para conversarmos sobre suas capacidade congnitivas" ]
+
 else 
-for ip in {1..254};
-do
-hping3 -S -p $2 -c 1 $1.$ip 2> /dev/null | GREP "flags=SA" | cut -d " " -f2 | cut -d "=" -f2;
-done
+  echo "É necessário reavalir novamente"
 fi
 
-#OBS: Com o comando abaixo add, estou enviando a saida do erro para a lixeira: "2> dev/null"
-      Poderia colocar 2> arquivo.txt
-      Filtrando com "GREP SA", tenho a certeza que a porta está aberta.
-      Filtrando com "cut -d", para imprimir na tela somente a informação do IP do host.
-      1>STDOUT
-      2>STDERR
-      0>STDIN
+______________________________________________________________________________________________________________
 
-################################# PARSING HTML (Analisando código html) ##################################
+########### Criando um script para marcar entrevistas ################
 
-#Descobrindo endereço Ip e subdomínios da URL
+#!/bin/bash
+
+echo " Tem quantos anos  de experiencia como pentester?"
+read anos
+if [ "anos" < "1"]
+then 
+        "volte quando tiver mais tempo na áres"
+else
+        "Vou agendar sua entrevista"
+fi
+
+__________________________________________________________________________
+
+############ Criando um script para efetuar um ping ############
+
+#!/bin/bash
+
+echo "Vamos testar se você alcança um determinado host?!"
+
+echo "Digite o endereço ip a ser testado"
+read "$ip"
+
+echo "Efetuando ping no ip" $ip
+
+ping -c1 $ip
+
+______________________________________________________________________________________________________________
+
+############ Explicações básicas #############
+
+#Operadores aritméticos
+
+#[EXP1 -eq EXP2]	Verdadeiro se EXP1 é igual a EXP2.
+#[EXP1 -ne EXP2]	Verdadeiro se EXP1 não é igual a EXP2.
+#[EXP1 -lt EXP2]	Verdadeiro se EXP1 é menor que EXP2.
+#[EXP1 -le EXP2]	Verdadeiro se EXP1 é menor ou igual a EXP2.
+#[EXP1 -gt EXP2]	Verdadeiro se EXP1 é maior que EXP2.
+#[EXP1 -ge EXP2]	Verdadeiro se EXP1 é maior ou igual a EXP2.
+
+
+#Operadores lógicos
+
+#[EXP1 -o EXP2]	Verdadeiro se EXP1 ou EXP2 for verdadeiro.
+#[EXP1 -a EXP2]	Verdadeiro se EXP1 e EXP2 forem verdadeiros.
+#[[EXP1 || EXP2]]	Verdadeiro se EXP1 ou EXP2 for verdadeiro. (Somente expansão)
+#[[EXP1 && EXP2]]	Verdadeiro se EXP1 e EXP2 forem verdadeiros. (Somente expansão)
+#[ ! EXP ]	Verdadeiro se EXP for falso. ! Não lógico (NOT)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
