@@ -8,23 +8,25 @@ wget businesscorp.com.br
 (ver as informações baixadas e salvas em arquivo específico)
 cat index.html
 
-#Adicionando filtros
+#ADICIONANDO FILTROS ATÉ QUE RESTE SOMENTE O ENDEREÇO IP
+
 grep href index.html <ou> cat index.html | grep href
 
 # filtrando a partir do segundo espaço
 grep href index.html | cut -d " " -f2
 
 #Filtrando por linhas que tem ponto (.)
-grep href index.html | cut -d " " -f2 | grep "\."
+grep href index.html | cut -d " " -f3 | grep "\."
 
-grep href index.html | cut -d " " -f2 | grep "\." | cut -d "'" -f1
+grep href index.html | cut -d " " -f3 | grep "\." | cut -d "'" -f1
 
 #Retirando as linhas que contem <l
-grep href index.html | cut -d " " -f2 | grep "\." | cut -d "'" -f1 | grep -v "<l"
+grep href index.html | cut -d "/" -f 3 | grep "\." | cut -d '"' -f 1  | grep -v "<l"
 
 #Direcionando a saída para um arquivo chamado lista
 grep href index.html | cut -d " " -f2 | grep "\." | cut -d "'" -f1 | grep -v "<l" > lista
 
+#ADICIONANDO FILTROS ATÉ QUE RESTE SOMENTE O ENDEREÇO IP
 
 
 
