@@ -1,0 +1,92 @@
+Retirado do site abaixo:
+https://www.linkedin.com/pulse/port-knocking-conceito-e-uso-da-ferramenta-knockd-peixoto/?trackingId=Rsa0Hg%2FAEPd87if7bUG09A%3D%3D
+
+Port Knocking: Conceito e Uso da Ferramenta Knockd
+Alberto Magno Peixoto
+Alberto Magno Peixoto
+Product Cybersecurity (Chief Engineer Office) at Embraer | Red Team | Ethical Hacking
+4 artigos 
+Seguir
+4 de setembro de 2023
+
+Abrir Leitor imersivo
+Introdução ao Port Knocking:
+A segurança de rede é uma preocupação fundamental na era digital, e os administradores de sistemas estão sempre buscando maneiras inovadoras de proteger seus sistemas contra ataques. Uma abordagem interessante é o conceito de “Port Knocking”, que envolve a abertura de portas de um servidor somente após um padrão específico de tráfego ter sido detectado. Isso adiciona uma camada adicional de segurança, uma vez que as portas não estão abertas constantemente. Nesta leitura, exploraremos o conceito de Port Knocking e forneceremos um manual básico para uso da ferramenta “knockd”.
+
+O Que é Port Knocking:
+O Port Knocking é um método de autenticação e segurança que envolve a idéia de que as portas de um servidor permanecerão “fechadas” até que um padrão específico de tráfego seja detectado. Esse padrão de tráfego geralmente envolve o envio de pacotes para uma sequência específica de portas no servidor. Quando essa sequência correta é detectada, o servidor desencadeia automaticamente a abertura das portas que estavam previamente “fechadas”, permitindo que a conexão seja estabelecida. Isso ajuda a minimizar a superfície de ataque, uma vez que as portas não estão abertas constantemente e só são expostas quando o padrão é corretamente reconhecido.
+Manual de Uso da Ferramenta “knockd”:
+O “knockd” é uma ferramenta popular de Port Knocking que permite configurar padrões específicos de pacotes para controlar a abertura de portas em um servidor.
+Fica aqui está um guia prático para usar o “knockd”.
+Passo 1 — Instalação: Certifique-se de ter o “knockd” instalado em seu sistema. Para sistemas baseados em Debian, use o seguinte comando:
+sudo apt-get install knockd
+Passo 2 — Configuração do arquivo “knockd.conf”: O arquivo de configuração do “knockd” está localizado em “/etc/knockd.conf”. 
+Abra o arquivo com um editor de texto:
+sudo nano /etc/knockd.conf
+Defina a sequência de portas:
+No arquivo de configuração, você especificará a sequência de portas que precisa ser “batida” para desencadear a abertura das portas desejadas. Cada linha representa uma configuração de sequência de portas:
+[sequence_name]
+sequence = 1000,2000,3000 
+seq_timeout = 5 
+command = /sbin/iptables -A INPUT -s %IP% -p tcp — dport 22 -j ACCEPT 
+tcpflags = syn
+sequence: Especifique a sequência de portas separadas por vírgulas.
+seq_timeout: Defina o tempo limite para completar a sequência.
+command: Defina o comando que será executado quando a sequência for reconhecida. Nesse caso de exemplo, estamos abrindo a porta 22 para o IP que realizou a sequência.
+tcpflags: Especifique os flags TCP que devem estar presentes nos pacotes para contar como parte da sequência (nesse caso, “SYN”).
+Passo 3 — Inicialização: Após configurar o arquivo “/etc/knockd.conf”, você pode iniciar o serviço “knockd”:
+sudo service knockd start
+Passo 4 — Realizando as “batidas”: Para abrir as portas, você precisará enviar pacotes para a sequência de portas configurada. Você pode usar a ferramenta “knock” para isso (que é instalada junto com o “knockd”):
+knock -v <server_ip> 1000 2000 3000
+Substitua “<server_ip>” pelo endereço IP do servidor e “1000 2000 3000” pela sequência de portas configurada.
+
+
+Exemplo de script em bash para utilização do “knock” para a realização das “batidas” na sequencia correta no IP alvo:
+#!/bin/bash
+
+# Defina o endereço IP do host alvo 
+TARGET_IP="192.168.1.2" 
+
+# Defina a sequência de portas a serem "batidas" 
+PORT_SEQUENCE="7000 8000 9000" 
+
+# Cores 
+GREEN='\033[0;32m' 
+NC='\033[0m'
+
+# Executa o comando knock para realizar o port knocking 
+knock -v $TARGET_IP $PORT_SEQUENCE
+
+# Verifica se o comando knock foi bem-sucedido 
+if [ $? -eq 0 ]; then 
+ echo -e "${GREEN}Port knocking successful!${NC}" 
+else 
+ echo "Port knocking failed."
+fi
+Exemplo extra de uso de “knocking”, porém utilizando um script em bash com a ferramenta “netcat”:
+#!/bin/bash
+
+# Defina o endereço IP do host alvo
+TARGET_IP="192.168.1.2"
+
+# Defina a sequência de portas a serem "batidas"
+PORT_SEQUENCE="7000 8000 9000"
+
+# Cores
+GREEN='\033[0;32m'
+NC='\033[0m'
+
+# Executa o comando knock para realizar o port knocking usando pacotes SYN via TCP
+for port in $PORT_SEQUENCE; do
+ nc -w1 -z -v -n $TARGET_IP $port
+done
+
+# Verifica se todas as portas foram "batidas" com sucesso
+if [ $? -eq 0 ]; then
+ echo -e "${GREEN}Port knocking successful!${NC}"
+else
+ echo "Port knocking failed."
+fi
+Conclusão:
+O Port Knocking é uma técnica interessante para adicionar uma camada adicional de segurança aos servidores, permitindo que as portas permaneçam fechadas até que um padrão específico de tráfego seja detectado. 
+A ferramenta “knockd” facilita a implementação dessa técnica, permitindo que você configure padrões personalizados para controlar a abertura de portas. No entanto, é importante lembrar que a segurança é um esforço contínuo e que o Port Knocking é apenas uma das muitas abordagens possíveis para proteger sistemas de rede.
