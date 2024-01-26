@@ -1,3 +1,52 @@
+Aumentando a velocidade usando paralelismo
+
+#!/bin/bash
+
+check_ip() {
+  ip=$1
+  echo "Testando IP $ip"
+  curl "http://$ip:1337/" -m .5 --silent --head --output /dev/null
+  if [ $? -eq 0 ]; then
+    echo "Porta 1337 aberta em $ip"
+    exit 0
+  fi
+}
+
+for i in {1..254}; do
+  for j in {1..254}; do
+    ip="172.16.$i.$j"
+    check_ip $ip &
+  done
+done
+
+# Aguarda todos os processos em segundo plano terminarem
+wait
+
+echo "Nenhuma porta 1337 aberta encontrada."
+exit 1
+
+
+################################################ Port knoking #####################################################
+
+#Enviar um pacote em 4 portas por endereço ip e em seguida verificar se a porta 1337 abriu nesse ip.
+
+#!/bin/bash
+if [ !$1 == " " ] ; then
+  echo "Informe a rede alvo, exemplo: 192.168.0"
+  exit 1
+else
+  for ip in {1..254} ; do
+  echo "Testando IP $1.$ip"
+  hping3 $1.$ip -S -c 1 -p 13 &> /dev/null
+  hping3 $1.$ip -S -c 1 -p 37 &> /dev/null
+  hping3 $1.$ip -S -c 1 -p 30000 &> /dev/null
+  hping3 $1.$ip -S -c 1 -p 3000 &> /dev/null
+  wget "http://$1.$ip:1337/" -m 2>/dev/null
+done
+fi
+exit 0
+______________________________________________________________________________________________________________
+
 ################################################ TESTE #####################################################
 
   GNU nano 6.2                                                            script.parsing.sh *                                                                     GNU nano 6.2                                        script.parsing.sg                                                 #!/bin/bash
