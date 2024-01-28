@@ -1,3 +1,28 @@
+UTILIZANDO O KNOCK PARA BATER NAS PORTAS ESPECÍFICAS, NO RANGE IP 172.16.1.1 até o 254.
+
+base_ip="172.16.1."
+
+# Loop de 1 a 254
+for i in {1..254}
+do
+    # Construir o endereço IP completo
+    target_ip="$base_ip$i"
+
+    # Executar o comando knock para o IP atual
+    knock -v $target_ip 1000 2000 3000
+
+    # Adicionar um pequeno atraso entre os comandos se desejado
+    sleep 1
+done
+
+
+#depois para ver se aporta específica que deseja abriu, verifique no com nmap
+
+nmap -p 1337 172.16.1.0/24 > nmap.txt
+grep "open" nmap.txt
+
+##########################################################################################################################################
+
 Aumentando a velocidade usando paralelismo
 
 #!/bin/bash
