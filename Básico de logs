@@ -7,8 +7,14 @@ reading from file monitoramento.pcapng, link-type RAW (Raw IP), snapshot length 
 #
 tcpdump -venr
 
-#
-src host ip 192.168.0.1 (exemplodeip)
+#Analisando somente logs relacionado ao host de origem e depois somente ao host de destino, de arquivo pcap especifico
+tcpdump -nr monitoramento.pcapng src host ip 192.168.0.1 (exemplodeip)
+tcpdump -nr monitoramento.pcapng dst host ip 192.168.0.1 (exemplodeip)
+
+#Analisando somente logs relacionado ao host de origem e depois somente ao host de destino, da placa de rede eth0
+tcpdump -i eth0 src host 10.106.0.1
+tcpdump -i eth0 dst host 10.106.0.1
+
 
 # Excluindo linhas que conhenha a palavra específica
 grep -v exemplo 
