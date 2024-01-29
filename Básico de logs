@@ -15,6 +15,12 @@ tcpdump -nr monitoramento.pcapng dst host ip 192.168.0.1 (exemplodeip)
 tcpdump -i eth0 src host 10.106.0.1
 tcpdump -i eth0 dst host 10.106.0.1
 
+# Todos os pacotes com origem e depois saida na interface eth0 na porta 22
+tcpdump -i eth0 src port 22
+tcpdump -i eth0 dst port 22
+
+#Com o parâmetro ‘not host’, podemos ver todo os pacotes que se passam na interface, exceto o 10.106.0.1 por exemplo:
+tcpdump -i eth0 not host 10.106.0.1
 
 # Excluindo linhas que conhenha a palavra específica
 grep -v exemplo 
