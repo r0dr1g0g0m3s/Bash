@@ -4,8 +4,12 @@ tcpdump -nr monitoramente.pcapng | head -n5
 tcpdump -nr monitoramento.pcapng src host 172.16.1.3 | grep -v "R." | cut -d " " -f3 | uniq | cut -d "." -f 6
 reading from file monitoramento.pcapng, link-type RAW (Raw IP), snapshot length 262144
 
+#Monitorando a interface de rede eth0
+tcpdump -i eth0
+#https://www.dicas-l.com.br/arquivo/como_utilizar_o_tcpdump.php
+
 #
-tcpdump -venr
+tcpdump -vner
 
 #Analisando somente logs relacionado ao host de origem e depois somente ao host de destino, de arquivo pcap especifico
 tcpdump -nr monitoramento.pcapng src host ip 192.168.0.1 (exemplodeip)
@@ -26,15 +30,17 @@ tcpdump -i eth0 not host 10.106.0.1
 grep -v exemplo 
 
 # Várias funções
-uniq
+uniq - remove as linhas duplicadas
 -c – -count: informa quantas vezes uma linha foi repetida, exibindo um número como prefixo da linha.
 -d – -repeated: Imprime apenas as linhas repetidas e não as linhas que não são repetidas.
 -u – -unique: permite imprimir apenas linhas únicas.
+https://chat.openai.com/c/1572dc27-2400-4201-b708-14b4a1773765
 
 #Organizador sequencial
 Sort
 sort -n Ordem sequencial de números, do menor para o maior
 sort -r Ordem alfabética, do menor para o maior
+#https://ioflood.com/blog/bash-sort/
 
 # Pulando espaços nas colunas das linhas
 cut -d " " -f 1
