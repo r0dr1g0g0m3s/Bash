@@ -1,0 +1,36 @@
+Filtrando logs
+
+ tcpdump -vnr monitoramento.pcapng "tcp [tcpflags] & (tcp-syn) != 0" | cut -d " " -f 5 | cut -d "." -f 1,2,3,4 | sort -rn | uniq -c
+
+ tcpdump -vnr monitoramento.pcapng "tcp [tcpflags] & (tcp-syn) != 0" | cut -d " " -f 5 | cut -d "." -f 1,2,3,4 | sort -rn | uniq | xargs | tr " " ","
+
+ tcpdump -vnr monitoramento.pcapng "src host 172.16.1.3 | grep -v "\[R" | cut -d " " -f 3 | cut -d"." -f5 | sort -n | uniq | xargs | tr " " ","
+
+Destrinchando o comando acima
+
+1. tcpdump -nr monitoramento.pcapng src host 172.16.1.3
+a. Filtramos o .pcap apenas para as linhas em que o IP de origem é o 172.16.1.3
+
+2. grep -v "\[R"
+a. Retiramos as linhas que existem pacotes de Reset
+
+3. cut -d " " -f 3
+a. capturamos apenas a terceira coluna usando o espaço como delimitador de
+campos (colunas)
+
+4. cut -d"." -f5
+a. Capturamos a quinta coluna , usando como delimitador o caracter “.” (ponto)
+
+5. sort -n
+a. Ordenamos numericamente
+
+6. uniq 
+a. Retiramos as duplicidades
+
+7. xargs
+a. organizamos os campos coletados um ao lado do outro separados por espaço em branco
+
+8. tr " " ","
+a. Substituímos os espaços em branco que separam os campos por “,” (vírgula)
+
+
